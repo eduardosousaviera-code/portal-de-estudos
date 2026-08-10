@@ -1,0 +1,183 @@
+.container-botao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px ;
+
+}
+
+.botao {
+    width: 300px;
+    padding: 20px;
+    border: none;
+    border-radius: 12px;
+
+    background: #ffcc00;
+    color: #222;
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.botao:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 200, 0, 0.6);
+}
+
+.botao:active {
+    transform: translateY(-2px) scale(0.95);
+}
+
+
+body {
+    background-color: red;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f4f6f8;
+    color: #202020;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #ea2f48;
+    color: white;
+    padding: 35px 20px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.textbox{
+    justify-content: center ;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.textbox input{
+    background-color: #2B2B2B;
+
+    margin-top:15px;
+
+    width:300px;
+
+    max-width:80%;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+main {
+    margin: auto;
+    max-width: 1100px;
+    padding: 40px 20px;
+}
+
+h2 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.materias {
+    display: grid;
+    gap: 20px;
+    grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.cartao {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+}
+
+.cartao h3 {
+    color: #2f5bea;
+    margin-bottom: 10px;
+}
+
+.cartao p {
+    margin-bottom: 20px;
+}
+
+.cartao a {
+    background-color: #2f5bea;
+    border-radius: 6px;
+    color: white;
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.cartao{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    transition:0.3s;
+
+    cursor:pointer;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+footer {
+    background-color: #202020;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header input{
+
+    margin-top:20px;
+
+    width:300px;
+
+    max-width:80%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+}
+
+.cartao:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 30px rgba(0,0,0,.15);
+
+}
