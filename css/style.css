@@ -45,8 +45,8 @@ body {
 }
 
 body {
-    background-color: #f4f6f8;
-    color: #202020;
+    background-color: #2B2B2B;
+    color: white;
     font-family: Arial, sans-serif;
     line-height: 1.6;
 }
@@ -68,9 +68,9 @@ header {
 }
 
 .textbox input{
-    background-color: #2B2B2B;
+    background-color:#2B2B2B;
 
-    margin-top:15px;
+    margin-top:10px;
 
     width:300px;
 
@@ -108,24 +108,26 @@ h2 {
     repeat(auto-fit, minmax(220px, 1fr));
 }
 
+
 .cartao {
-    background-color: white;
+    background-color: #ffcc00;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 25px;
 }
 
 .cartao h3 {
-    color: #2f5bea;
+    color: #2B2B2B;
     margin-bottom: 10px;
 }
 
 .cartao p {
     margin-bottom: 20px;
+    color: #2B2B2B;
 }
 
 .cartao a {
-    background-color: #2f5bea;
+    background-color:#2B2B2B;
     border-radius: 6px;
     color: white;
     display: inline-block;
@@ -135,7 +137,7 @@ h2 {
 
 .cartao{
 
-    background:white;
+    background:#ffcc00;
 
     border-radius:15px;
 
