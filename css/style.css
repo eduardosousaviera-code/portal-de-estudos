@@ -62,9 +62,6 @@
 }
 
 
-body {
-    background-color: red;
-}
 
 * {
     box-sizing: border-box;
@@ -173,8 +170,6 @@ h2 {
 
     transition:0.3s;
 
-    cursor:pointer;
-
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 
 }
@@ -205,9 +200,29 @@ header input{
 }
 
 .cartao:hover{
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 200, 0, 0.6);
+}
+/** **/
+.cartao a:active {
+    transform: translateY(-2px) scale(0.95);
+}
 
-    transform:translateY(-8px);
+.cartao a {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    box-shadow:0 15px 30px rgba(0,0,0,.15);
+.cartao a:hover{
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 12px 30px #2B2B2B;
+}
 
+.cartao a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cartao h3, p {
+    text-align: center;
 }
