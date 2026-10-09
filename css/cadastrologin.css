@@ -57,7 +57,8 @@ footer {
     border-radius: 23px;
     text-decoration: none;
     padding: 12px;
-    margin-right: 30px;
+
+    margin-right: 30px;   /*  <-- distancia do botao para o quadro*/
 }
 
 a {
@@ -68,4 +69,9 @@ a {
     color: #2B2B2B;
 }
 
-
+.avrt {
+    gap: 60px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 47px;
+}

@@ -1,5 +1,8 @@
 body {
     background-color: #2B2B2B;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .botao a {
@@ -14,10 +17,3 @@ body {
     color: inherit;
 }
 
-footer {
-    margin-top: 180px
-}
-
-.bt1 {
-    margin-top: 179px;
-}
