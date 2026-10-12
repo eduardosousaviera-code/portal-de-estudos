@@ -1,0 +1,19 @@
+body {
+    background-color: #2B2B2B;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header a img {
+    width: 45px;
+    height: auto;
+}
+
+header{
+    display: grid;
+    align-items: center;
+    justify-content: grid;
+    text-align: center;
+    grid-template-columns: 150px 1fr 150px;
+} 
