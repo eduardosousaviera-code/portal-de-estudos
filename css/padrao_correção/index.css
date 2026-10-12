@@ -7,3 +7,14 @@ body {
 .materias {
     display: flex;
 }
+
+.bt3 a {
+    color: #2B2B2B;
+    text-decoration: none;
+}
+
+.bt3 {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
