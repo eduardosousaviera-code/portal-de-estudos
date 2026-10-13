@@ -73,3 +73,23 @@ main {
 .conteudo .cartao p {
     margin-bottom: 10px;
 }
+
+
+/* --- Correções de espaçamento para o botão "voltar" na página geografia.html --- */
+/* O arquivo global define main com min-height:100vh, o que empurra elementos que vêm depois (como o botão) para baixo.
+   Aqui sobrescrevemos apenas para esta página e reduzimos padding/margin dos containers do botão. */
+
+main {
+    /* Anula o min-height definido globalmente para evitar que o botão fique muito abaixo */
+    min-height: auto;
+}
+
+/* Reduz o espaçamento dentro do container do botão */
+.container-botao {
+    padding: 8px;
+}
+
+/* Reduz a margem externa do bloco que envolve o botão */
+.espbt3 {
+    margin: 8px;
+}
