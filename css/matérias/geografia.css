@@ -2,7 +2,6 @@ body {
     background-color: #2B2B2B;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
 header a img {
@@ -84,12 +83,6 @@ main {
     min-height: auto;
 }
 
-/* Reduz o espaçamento dentro do container do botão */
-.container-botao {
-    padding: 8px;
-}
 
-/* Reduz a margem externa do bloco que envolve o botão */
-.espbt3 {
-    margin: 8px;
-}
+
+
