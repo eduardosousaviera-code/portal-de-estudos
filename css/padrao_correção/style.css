@@ -130,6 +130,30 @@ h2 {
     text-align: center;
 }
 
+main {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.cartao h3, p {
+    text-align: center;
+}
+
+
+.materias .cartao {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.materias .cartao p {
+    margin-bottom: 10px;
+}
+
 .materias {
     display: grid;
     gap: 20px;

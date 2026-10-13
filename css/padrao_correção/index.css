@@ -4,10 +4,6 @@ body {
     min-height: 100vh;
 }
 
-.materias {
-    display: flex;
-}
-
 .bt3 a {
     color: #2B2B2B;
     text-decoration: none;
