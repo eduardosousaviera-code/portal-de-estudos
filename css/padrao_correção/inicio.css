@@ -5,6 +5,20 @@ body {
     min-height: 100vh;
 }
 
+main {
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.acess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .botao a {
     display: flex;
     width: 100%;
