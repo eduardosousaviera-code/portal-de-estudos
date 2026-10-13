@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
 
-    padding: 30px ;
+    padding: 8px ;
 
 }
 
@@ -35,7 +35,7 @@
 }
 
 .espbt3 {
-    margin: 20px;
+    margin: 8px;
 }
 
 .botao {
@@ -123,6 +123,7 @@ main {
     margin: auto;
     max-width: 1100px;
     padding: 40px 20px;
+    min-height: auto;
 }
 
 h2 {
@@ -135,7 +136,7 @@ main {
     max-width: 1100px;
     margin: 0 auto;
     padding: 40px 20px;
-    min-height: 100vh;
+    min-height: auto;
 }
 
 .cartao h3, p {
