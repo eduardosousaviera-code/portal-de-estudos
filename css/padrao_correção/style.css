@@ -35,7 +35,7 @@
 }
 
 .espbt3 {
-    margin: 20px;
+    margin: 8px; /*  originalmete 20px  */
 }
 
 .botao {
@@ -52,12 +52,13 @@
     cursor: pointer;
 
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .botao:hover {
     transform: translateY(-6px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(255, 200, 0, 0.6);
+    box-shadow: 0 12px 30px rgba(0, 255, 42, 0.6);
+    background-color: #00ff15;
 }
 
 .botao:active {
@@ -77,6 +78,10 @@ body {
     color: white;
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    min-height: auto; /* o espaçamento DESTA pagita ta errado (index), da uma olhada no espbt3 tbm /\  */
+   
+    display: flex;
+    justify-content: center;
 }
 
 header {
@@ -167,7 +172,6 @@ main {
     background-color: #ffcc00;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 25px;
 }
 
 .cartao h3 {
@@ -195,9 +199,9 @@ main {
 
     border-radius:15px;
 
-    padding:25px;
+    padding: 25px;
 
-    transition:0.3s;
+    transition: all 0.3s ease-in-out;
 
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 
@@ -230,8 +234,10 @@ header input{
 
 .cartao:hover{
     transform: translateY(-6px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(255, 200, 0, 0.6);
-}
+    box-shadow: 0 12px 30px rgba(0, 255, 42, 0.6);
+    background-color: #00ff15;
+};
+
 /** **/
 .cartao a:active {
     transform: translateY(-2px) scale(0.95);
@@ -239,6 +245,9 @@ header input{
 
 .cartao a {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cartao a:hover{
@@ -246,11 +255,6 @@ header input{
     box-shadow: 0 12px 30px #2B2B2B;
 }
 
-.cartao a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 .cartao h3, p {
     text-align: center;
