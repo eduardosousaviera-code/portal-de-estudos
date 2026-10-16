@@ -1,0 +1,20 @@
+.botao2 a {
+    color: #2b2b2b
+}
+
+.container-botao {
+    text-align: center;
+}
+
+
+.aula {
+    max-width: 53%;
+    margin: 30px auto;
+}
+
+.aula iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    border-radius: 12px;
+}
