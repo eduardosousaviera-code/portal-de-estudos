@@ -4,16 +4,21 @@ from pathlib import Path
 app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='')
 
 
-# Páginas principais
+# Página inicial do site
 @app.route('/')
-def index():
-    return render_template('html/paginas-usuario/index.html')
-
-
 @app.route('/inicio')
 @app.route('/inicio.html')
 def inicio():
     return render_template('html/paginas-usuario/inicio.html')
+
+
+# Portal principal (lista de matérias)
+@app.route('/portal')
+@app.route('/portal.html')
+@app.route('/index')
+@app.route('/index.html')
+def portal():
+    return render_template('html/paginas-usuario/index.html')
 
 
 @app.route('/login')
