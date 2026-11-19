@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cadastro</title>
-    <link rel="icon" type="image/png" href="../../img/biblioteca/favicon.png">
-    <link rel="stylesheet" href="../../css/padrao_correção/style.css">
-    <link rel="stylesheet" href="../../css/padrao_correção/cadastrologin.css">
+    <title>Cadastro</title>
+    <link rel="icon" type="image/png" href="/img/biblioteca/favicon.png">
+    <link rel="stylesheet" href="/css/padrao_correção/style.css">
+    <link rel="stylesheet" href="/css/padrao_correção/cadastrologin.css">
 </head>
 <body>
     <header>
-        <h1>Crie seu nome de Usuario e Senha</h1>
+        <h1>Crie seu nome de usuário e senha</h1>
     </header>
     <main>
         <section class="avrt2">
-            <div class="tabela">
-                <div class="textbox">
-                    <input type="text" placeholder="nome de usuario">
-                    <br>
-                    <input type="text" placeholder="senha">
-                    <br>
-                    <input type="text" placeholder="confirmar senha">
+            {% if erro %}
+                <p class="mensagem-erro">{{ erro }}</p>
+            {% endif %}
+
+            <form method="POST" action="/cadastro" class="avrt">
+                <div class="tabela">
+                    <div class="textbox">
+                        <input type="text" name="usuario" placeholder="Nome de usuário" autocomplete="username" required>
+                        <br>
+                        <input type="password" name="senha" placeholder="Senha" autocomplete="new-password" required>
+                        <br>
+                        <input type="password" name="confirmar_senha" placeholder="Confirmar senha" autocomplete="new-password" required>
+                    </div>
                 </div>
-            </div>
+
+                <button type="submit" class="bt2 botao">Cadastrar</button>
+            </form>
+
             <div class="avrt">
-                <div class="bt2">
-                    <div class="botao">
-                        <a href="/portal">confirmar</a>
-                    </div>
-                </div>
-                <div class="bt2">
-                    <div class="botao2">
-                        <a href="/">voltar</a>
-                    </div>
-                </div>
+                <a class="bt2 botao2" href="/login">Já tenho uma conta</a>
+                <a class="bt2 botao2" href="/">Voltar</a>
             </div>
         </section>
     </main>
