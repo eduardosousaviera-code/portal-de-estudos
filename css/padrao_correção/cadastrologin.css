@@ -7,6 +7,7 @@ body {
 
     background-color: #2B2B2B;
 }
+
 .textbox {
     display: flex;
     width: 300px;
@@ -23,7 +24,6 @@ body {
 
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
     transition: all 0.3s ease-in-out;
-
 }
 
 .textbox:hover {
@@ -34,19 +34,8 @@ body {
 }
 
 .article {
-    color:#ffcc00;
+    color: #ffcc00;
 }
-
-/*
-.tabela :hover {
-    box-shadow: 0 12px 30px rgba(0, 255, 42, 0.6);
-    background-color:  #00ff15;;
-    transform: translateY(-6px) scale(1.05);
-    transition: all 0.3s ease-in-out;
-}
-*/
-
-
 
 main {
     flex: 1;
@@ -60,7 +49,6 @@ footer {
     margin-top: 5px;
 }
 
-
 .bt2 {
     height: 50px;
     text-align: center;
@@ -69,19 +57,15 @@ footer {
     text-decoration: none;
     padding: 12px;
 
-    margin-right: 30px;   /*  <-- distancia do botao para o quadro  (direita) */
-    margin-left: 30px;  /*  <-- distancia do botao para o quadro  (esquerda) */
+    margin-right: 30px;
+    margin-left: 30px;
 }
 
 a {
     text-decoration: none;
 }
 
-.bt2 a {
-    color: #2B2B2B;
-}
-
-.avrt2{
+.avrt2 {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,10 +73,34 @@ a {
     margin-bottom: 20px;
 }
 
-.avrt {
-    gap: 45px; /*  <--  originalmente 60px  */
+.avrt2 form {
     display: flex;
     flex-direction: column;
-    margin-top: 10px
+    align-items: center;
 }
 
+.avrt {
+    gap: 45px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.avrt2 .mensagem-erro {
+    color: #ea2f48;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.bt2 .botao,
+.bt2 .botao2 {
+    display: flex;
+    width: 300px;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.bt2 .botao {
+    line-height: 1;
+}
