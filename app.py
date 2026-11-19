@@ -28,14 +28,26 @@ def conectar():
 
 
 def criar_tabela():
-    with conectar() as conexao:
-        conexao.execute("""
-            CREATE TABLE IF NOT EXISTS usuarios (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                usuario TEXT NOT NULL UNIQUE,
-                senha_hash TEXT NOT NULL
-            )
-        """)
+    try:
+        with conectar() as conexao:
+            conexao.execute("""
+                CREATE TABLE IF NOT EXISTS usuarios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    usuario TEXT NOT NULL UNIQUE,
+                    senha_hash TEXT NOT NULL
+                )
+            """)
+    except sqlite3.DatabaseError:
+        if CAMINHO_BANCO.exists():
+            CAMINHO_BANCO.unlink()
+        with conectar() as conexao:
+            conexao.execute("""
+                CREATE TABLE IF NOT EXISTS usuarios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    usuario TEXT NOT NULL UNIQUE,
+                    senha_hash TEXT NOT NULL
+                )
+            """)
 
 
 criar_tabela()
