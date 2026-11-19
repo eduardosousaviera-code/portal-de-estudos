@@ -1,14 +1,22 @@
 from flask import Flask, render_template, abort
 from pathlib import Path
+from banco import conectar
 
 app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='')
 
+import sqlite3
+
+def conectar():
+    conexao = sqlite3.connect('banco.db')
+    conexao.row_factory = sqlite3.Row
+    return conexao
 
 # Página inicial / landing page
 @app.route('/')
 @app.route('/inicio')
 @app.route('/inicio.html')
 def inicio():
+
     return render_template('html/paginas-usuario/inicio.html')
 
 

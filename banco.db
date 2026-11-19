@@ -1,0 +1,7 @@
+CREATE TABLE cadastro(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario TEXT NT NULL,
+    senha TEXT NOT NULL
+);
+
+INSERT INTO usuaros (usuario, senha ) VALUES ('admin, '1234')
