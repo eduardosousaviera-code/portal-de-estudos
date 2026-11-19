@@ -1,116 +1,184 @@
-from flask import Flask, render_template, abort
+import os
+import sqlite3
 from pathlib import Path
 
-app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='')
+from flask import Flask, abort, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from banco import inicializar_banco, obter_conexao
+
+RAIZ = Path(__file__).resolve().parent
+app = Flask(__name__, template_folder=str(RAIZ), static_folder=None)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "chave-de-desenvolvimento-altere-em-producao")
+
+# Cria banco.db e a tabela de usuários na primeira execução.
+inicializar_banco()
 
 
-# Página inicial / landing page
-@app.route('/')
-@app.route('/inicio')
-@app.route('/inicio.html')
+@app.route("/css/<path:arquivo>")
+def servir_css(arquivo):
+    return app.send_static_file(arquivo) if False else __import__("flask").send_from_directory(RAIZ / "css", arquivo)
+
+
+@app.route("/img/<path:arquivo>")
+def servir_img(arquivo):
+    return __import__("flask").send_from_directory(RAIZ / "img", arquivo)
+
+
+@app.route("/script/<path:arquivo>")
+def servir_script(arquivo):
+    return __import__("flask").send_from_directory(RAIZ / "script", arquivo)
+
+
+@app.route("/")
+@app.route("/inicio")
+@app.route("/inicio.html")
 def inicio():
-    return render_template('html/paginas-usuario/inicio.html')
+    return render_template("html/paginas-usuario/inicio.html")
 
 
-# Portal principal / seleção de matérias
-@app.route('/portal')
-@app.route('/portal.html')
-@app.route('/index')
-@app.route('/index.html')
+@app.route("/portal")
+@app.route("/portal.html")
+@app.route("/index")
+@app.route("/index.html")
 def portal():
-    return render_template('html/paginas-usuario/index.html')
+    if "usuario" not in session:
+        return redirect(url_for("login"))
+    return render_template("html/paginas-usuario/index.html")
 
 
-# Autenticação
-@app.route('/login')
-@app.route('/login.html')
+@app.route("/login", methods=["GET", "POST"])
+@app.route("/login.html", methods=["GET", "POST"])
 def login():
-    return render_template('html/paginas-usuario/login.html')
+    if request.method == "POST":
+        usuario = request.form.get("usuario", "").strip()
+        senha = request.form.get("senha", "")
+        if not usuario or not senha:
+            return render_template("html/paginas-usuario/login.html", erro="Preencha usuário e senha."), 400
+
+        with obter_conexao() as conexao:
+            conta = conexao.execute(
+                "SELECT usuario, senha_hash FROM usuarios WHERE usuario = ?",
+                (usuario,),
+            ).fetchone()
+
+        if conta is None or not check_password_hash(conta["senha_hash"], senha):
+            return render_template("html/paginas-usuario/login.html", erro="Usuário ou senha incorretos."), 401
+
+        session.clear()
+        session["usuario"] = conta["usuario"]
+        return redirect(url_for("portal"))
+
+    return render_template("html/paginas-usuario/login.html")
 
 
-@app.route('/cadastro')
-@app.route('/cadastro.html')
+@app.route("/cadastro", methods=["GET", "POST"])
+@app.route("/cadastro.html", methods=["GET", "POST"])
 def cadastro():
-    return render_template('html/paginas-usuario/cadastro_usuario.html')
+    if request.method == "POST":
+        usuario = request.form.get("usuario", "").strip()
+        senha = request.form.get("senha", "")
+        confirmar_senha = request.form.get("confirmar_senha", "")
+
+        if not usuario or not senha:
+            return render_template("html/paginas-usuario/cadastro_usuario.html", erro="Preencha usuário e senha."), 400
+        if senha != confirmar_senha:
+            return render_template("html/paginas-usuario/cadastro_usuario.html", erro="As senhas não conferem."), 400
+
+        try:
+            with obter_conexao() as conexao:
+                conexao.execute(
+                    "INSERT INTO usuarios (usuario, senha_hash) VALUES (?, ?)",
+                    (usuario, generate_password_hash(senha)),
+                )
+        except sqlite3.IntegrityError:
+            return render_template("html/paginas-usuario/cadastro_usuario.html", erro="Esse usuário já existe."), 409
+
+        return redirect(url_for("login"))
+
+    return render_template("html/paginas-usuario/cadastro_usuario.html")
 
 
-# Matérias principais
-@app.route('/materias/portugues')
-@app.route('/materias/portugues.html')
-@app.route('/matérias/portugues')
-@app.route('/matérias/portugues.html')
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("inicio"))
+
+
+@app.route("/materias/portugues")
+@app.route("/materias/portugues.html")
+@app.route("/matérias/portugues")
+@app.route("/matérias/portugues.html")
 def portugues():
-    return render_template('html/paginas-materias/português.html')
+    return render_template("html/paginas-materias/português.html")
 
 
-@app.route('/materias/matematica')
-@app.route('/materias/matematica.html')
+@app.route("/materias/matematica")
+@app.route("/materias/matematica.html")
 def matematica():
-    return render_template('html/paginas-materias/matematica.html')
+    return render_template("html/paginas-materias/matematica.html")
 
 
-@app.route('/materias/historia')
-@app.route('/materias/historia.html')
+@app.route("/materias/historia")
+@app.route("/materias/historia.html")
 def historia():
-    return render_template('html/paginas-materias/historia.html')
+    return render_template("html/paginas-materias/historia.html")
 
 
-@app.route('/materias/geografia')
-@app.route('/materias/geografia.html')
+@app.route("/materias/geografia")
+@app.route("/materias/geografia.html")
 def geografia():
-    return render_template('html/paginas-materias/geografia.html')
+    return render_template("html/paginas-materias/geografia.html")
 
 
-# Temas de Geografia
-@app.route('/materias/geografia/mapas')
-@app.route('/materias/geografia/mapas.html')
+@app.route("/materias/geografia/mapas")
+@app.route("/materias/geografia/mapas.html")
 def geografia_mapas():
-    return render_template('html/matérias/temas-geo/mapas.html')
+    return render_template("html/matérias/temas-geo/mapas.html")
 
 
-@app.route('/materias/geografia/populacao')
-@app.route('/materias/geografia/populacao.html')
-@app.route('/materias/geografia/população')
-@app.route('/materias/geografia/população.html')
+@app.route("/materias/geografia/populacao")
+@app.route("/materias/geografia/populacao.html")
+@app.route("/materias/geografia/população")
+@app.route("/materias/geografia/população.html")
 def geografia_populacao():
-    return render_template('html/matérias/temas-geo/população.html')
+    return render_template("html/matérias/temas-geo/população.html")
 
 
-@app.route('/materias/geografia/economia')
-@app.route('/materias/geografia/economia.html')
+@app.route("/materias/geografia/economia")
+@app.route("/materias/geografia/economia.html")
 def geografia_economia():
-    return render_template('html/matérias/temas-geo/economia.html')
+    return render_template("html/matérias/temas-geo/economia.html")
 
 
-@app.route('/materias/geografia/territorio')
-@app.route('/materias/geografia/territorio.html')
+@app.route("/materias/geografia/territorio")
+@app.route("/materias/geografia/territorio.html")
 def geografia_territorio():
-    return render_template('html/matérias/temas-geo/territorio.html')
+    return render_template("html/matérias/temas-geo/territorio.html")
 
 
-@app.route('/materias/geografia/meio-ambiente')
-@app.route('/materias/geografia/meio-ambiente.html')
+@app.route("/materias/geografia/meio-ambiente")
+@app.route("/materias/geografia/meio-ambiente.html")
 def geografia_meio_ambiente():
-    return render_template('html/matérias/temas-geo/meio-ambiente.html')
+    return render_template("html/matérias/temas-geo/meio-ambiente.html")
 
 
-# Rotas antigas / compatibilidade com HTML puro
-@app.route('/html/<path:filepath>')
+@app.route("/html/<path:filepath>")
 def serve_html(filepath):
-    p = Path('html') / filepath
-    if not p.exists() or p.suffix.lower() != '.html':
+    pagina = RAIZ / "html" / filepath
+    if not pagina.exists() or pagina.suffix.lower() != ".html":
         abort(404)
-    return render_template(str(p).replace('\\', '/'))
+    return render_template(str(pagina.relative_to(RAIZ)).replace("\\", "/"))
 
 
-@app.route('/<path:filepath>')
+@app.route("/<path:filepath>")
 def fallback(filepath):
-    if filepath.lower().endswith('.html'):
-        p = Path(filepath)
-        if p.exists():
-            return render_template(str(p).replace('\\', '/'))
+    if filepath.lower().endswith(".html"):
+        pagina = RAIZ / filepath
+        if pagina.exists():
+            return render_template(str(pagina.relative_to(RAIZ)).replace("\\", "/"))
     abort(404)
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
