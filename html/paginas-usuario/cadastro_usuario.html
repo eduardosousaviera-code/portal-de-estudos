@@ -16,25 +16,23 @@
         <section class="avrt2">
             <div class="tabela">
                 <div class="textbox">
-                    <input type="text" placeholder="nome de usuario">
+                    <input type="text" name="usuario" placeholder="nome de usuario" autocomplete="username" form="form-cadastro" required>
                     <br>
-                    <input type="text" placeholder="senha">
+                    <input type="password" name="senha" placeholder="senha" autocomplete="new-password" form="form-cadastro" required>
                     <br>
-                    <input type="text" placeholder="confirmar senha">
+                    <input type="password" name="confirmar_senha" placeholder="confirmar senha" autocomplete="new-password" form="form-cadastro" required>
                 </div>
             </div>
-            <div class="avrt">
+            <form id="form-cadastro" method="POST" action="/cadastro" class="avrt">
                 <div class="bt2">
-                    <div class="botao">
-                        <a href="/portal">confirmar</a>
-                    </div>
+                    <button type="submit" class="botao">confirmar</button>
                 </div>
                 <div class="bt2">
                     <div class="botao2">
                         <a href="/">voltar</a>
                     </div>
                 </div>
-            </div>
+            </form>
         </section>
     </main>
     <footer>
