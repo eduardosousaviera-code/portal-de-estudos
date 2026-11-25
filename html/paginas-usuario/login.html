@@ -18,7 +18,18 @@
                 <div class="textbox">
                     <input type="text" name="usuario" placeholder="nome de usuario" autocomplete="username" form="form-login" required>
                     <br>
-                    <input type="password" name="senha" placeholder="senha" autocomplete="current-password" form="form-login" required>
+                    <div class="campo-senha">
+                        <input id="senha" type="password" name="senha" placeholder="senha" autocomplete="current-password" form="form-login" required>
+                        <button class="botao-mostrar-senha" type="button" aria-label="Mostrar senha" aria-controls="senha" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path class="icone-olho-aberto" d="M12 5c-5 0-9.27 3.11-11 7 1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                                <g class="icone-olho-fechado">
+                                    <path d="M12 5c-5 0-9.27 3.11-11 7 1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"></path>
+                                    <path d="m3 3 18 18" fill="none" stroke="currentColor" stroke-width="2"></path>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
             <form id="form-login" method="POST" action="/login" class="avrt">
@@ -36,5 +47,16 @@
     <footer>
         <p>2026</p>
     </footer>
+    <script>
+        document.querySelectorAll(".botao-mostrar-senha").forEach((botao) => {
+            const campo = document.getElementById(botao.getAttribute("aria-controls"));
+            botao.addEventListener("click", () => {
+                const mostrar = campo.type === "password";
+                campo.type = mostrar ? "text" : "password";
+                botao.setAttribute("aria-label", mostrar ? "Ocultar senha" : "Mostrar senha");
+                botao.setAttribute("aria-pressed", String(mostrar));
+            });
+        });
+    </script>
 </body>
 </html>
