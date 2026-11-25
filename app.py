@@ -1,10 +1,12 @@
 import os
+import re
 import sqlite3
+from html import escape as escape_html
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, redirect, render_template, request, session, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import BadRequest
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from banco import inicializar_banco, obter_conexao
 
@@ -20,6 +22,36 @@ RESPOSTAS_CORRETAS_MEIO_AMBIENTE = {
     "q2": "c",
     "q3": "a",
 }
+
+
+@app.after_request
+def exibir_usuario_logado(response):
+    usuario = session.get("usuario")
+    if (
+        not usuario
+        or request.endpoint in {"inicio", "login", "cadastro"}
+        or response.mimetype != "text/html"
+    ):
+        return response
+
+    conteudo = response.get_data(as_text=True)
+    header_existe = re.search(r"<header\b", conteudo, flags=re.IGNORECASE) is not None
+    if not header_existe and re.search(r"<body\b", conteudo, flags=re.IGNORECASE) is None:
+        return response
+
+    classe_selo = "usuario-sessao" if header_existe else "usuario-sessao usuario-sessao--flutuante"
+    selo = f'<span class="{classe_selo}">{escape_html(usuario)}</span>'
+    seletor = r"(<header\b[^>]*>)" if header_existe else r"(<body\b[^>]*>)"
+    conteudo, inseridos = re.subn(
+        seletor,
+        lambda correspondencia: correspondencia.group(1) + selo,
+        conteudo,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    if inseridos:
+        response.set_data(conteudo)
+    return response
 
 
 @app.route("/css/<path:arquivo>")
