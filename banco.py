@@ -22,3 +22,14 @@ def inicializar_banco():
             )
             """
         )
+        conexao.execute(
+            """
+            CREATE TABLE IF NOT EXISTS respostas_meio_ambiente (
+                usuario_id INTEGER NOT NULL,
+                pergunta_id TEXT NOT NULL,
+                alternativa TEXT NOT NULL,
+                PRIMARY KEY (usuario_id, pergunta_id),
+                FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE
+            )
+            """
+        )

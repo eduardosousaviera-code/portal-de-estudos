@@ -23,6 +23,39 @@
             <iframe width="560" height="315" src="https://www.youtube.com/embed/fRWa2fbkN5I?si=HKnzlwseRJzU7sBB" title="aula" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </article>
 
+        <section class="quiz-ambiente" aria-labelledby="titulo-quiz">
+            <h2 id="titulo-quiz">Quiz sobre meio ambiente</h2>
+            <p class="quiz-intro">Responda às três perguntas. Entre na sua conta para salvar e acessar seu progresso em qualquer dispositivo.</p>
+            <form id="quiz-ambiente">
+                <fieldset class="pergunta" data-pergunta="q1">
+                    <legend>1. Qual atividade humana aumenta diretamente a concentração de gases do efeito estufa?</legend>
+                    <label><input type="radio" name="q1" value="a"> O plantio de árvores nativas</label>
+                    <label><input type="radio" name="q1" value="b"> A queima de combustíveis fósseis</label>
+                    <label><input type="radio" name="q1" value="c"> A proteção de áreas naturais</label>
+                    <label><input type="radio" name="q1" value="d"> A reutilização de materiais</label>
+                    <p class="resultado-pergunta" aria-live="polite"></p>
+                </fieldset>
+                <fieldset class="pergunta" data-pergunta="q2">
+                    <legend>2. Qual atitude ajuda a reduzir a quantidade de resíduos enviados a aterros?</legend>
+                    <label><input type="radio" name="q2" value="a"> Descartar recicláveis junto ao lixo orgânico</label>
+                    <label><input type="radio" name="q2" value="b"> Usar produtos descartáveis sempre que possível</label>
+                    <label><input type="radio" name="q2" value="c"> Separar recicláveis e reutilizar materiais</label>
+                    <label><input type="radio" name="q2" value="d"> Queimar o lixo doméstico</label>
+                    <p class="resultado-pergunta" aria-live="polite"></p>
+                </fieldset>
+                <fieldset class="pergunta" data-pergunta="q3">
+                    <legend>3. Uma consequência possível do desmatamento é:</legend>
+                    <label><input type="radio" name="q3" value="a"> A perda de biodiversidade e a erosão do solo</label>
+                    <label><input type="radio" name="q3" value="b"> O aumento permanente da fertilidade do solo</label>
+                    <label><input type="radio" name="q3" value="c"> A recuperação imediata de habitats naturais</label>
+                    <label><input type="radio" name="q3" value="d"> A eliminação da poluição dos rios</label>
+                    <p class="resultado-pergunta" aria-live="polite"></p>
+                </fieldset>
+                <button class="salvar-quiz" type="submit">Salvar respostas</button>
+                <p id="status-quiz" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+
         <div class="acess">
             <div class="bt2">
                 <div class="container-botao">
@@ -36,6 +69,146 @@
     <footer>
         <p>2026</p>
     </footer>
-    
+    <style>
+        .quiz-ambiente {
+            max-width: 760px;
+            margin: 35px auto;
+            padding: 24px;
+            border-radius: 12px;
+            background: #363636;
+        }
+
+        .quiz-ambiente h2 {
+            margin-bottom: 10px;
+        }
+
+        .quiz-intro {
+            margin-bottom: 24px;
+        }
+
+        .pergunta {
+            margin: 0 0 20px;
+            padding: 16px;
+            border: 1px solid #777;
+            border-radius: 8px;
+        }
+
+        .pergunta legend {
+            padding: 0 6px;
+            font-weight: bold;
+        }
+
+        .pergunta label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .pergunta input {
+            margin-right: 8px;
+        }
+
+        .resultado-pergunta {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .salvar-quiz {
+            display: block;
+            margin: 0 auto;
+            padding: 12px 24px;
+            border: 0;
+            border-radius: 8px;
+            background: #ffcc00;
+            color: #222;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .salvar-quiz:disabled {
+            cursor: wait;
+            opacity: 0.7;
+        }
+
+        #status-quiz {
+            margin-top: 16px;
+        }
+    </style>
+    <script>
+        const formularioQuiz = document.getElementById("quiz-ambiente");
+        const statusQuiz = document.getElementById("status-quiz");
+        const botaoQuiz = formularioQuiz.querySelector(".salvar-quiz");
+
+        function mostrarLinkLogin(mensagem) {
+            statusQuiz.textContent = `${mensagem} `;
+            const link = document.createElement("a");
+            link.href = "/login";
+            link.textContent = "Entrar";
+            statusQuiz.append(link);
+        }
+
+        function mostrarResultado(dados) {
+            Object.entries(dados.answers).forEach(([perguntaId, alternativa]) => {
+                const escolha = formularioQuiz.querySelector(`input[name="${perguntaId}"][value="${alternativa}"]`);
+                if (escolha) escolha.checked = true;
+            });
+
+            if (dados.results) {
+                Object.entries(dados.results).forEach(([perguntaId, correta]) => {
+                    const resultado = formularioQuiz.querySelector(`[data-pergunta="${perguntaId}"] .resultado-pergunta`);
+                    resultado.textContent = correta ? "Resposta correta." : "Resposta incorreta.";
+                });
+                statusQuiz.textContent = `Progresso salvo. Você acertou ${dados.correct_count} de 3 perguntas.`;
+            }
+        }
+
+        async function carregarProgresso() {
+            try {
+                const resposta = await fetch("/api/progresso/meio-ambiente");
+                const dados = await resposta.json();
+                if (resposta.status === 401) {
+                    mostrarLinkLogin(dados.erro);
+                    return;
+                }
+                if (!resposta.ok) throw new Error(dados.erro || "Não foi possível carregar o progresso.");
+                mostrarResultado(dados);
+            } catch (erro) {
+                statusQuiz.textContent = erro.message;
+            }
+        }
+
+        formularioQuiz.addEventListener("submit", async (evento) => {
+            evento.preventDefault();
+            const respostas = Object.fromEntries(new FormData(formularioQuiz));
+            if (Object.keys(respostas).length !== 3) {
+                statusQuiz.textContent = "Responda às três perguntas antes de salvar.";
+                return;
+            }
+
+            botaoQuiz.disabled = true;
+            statusQuiz.textContent = "Salvando seu progresso...";
+            try {
+                const resposta = await fetch("/api/progresso/meio-ambiente", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ answers: respostas })
+                });
+                const dados = await resposta.json();
+                if (resposta.status === 401) {
+                    mostrarLinkLogin(dados.erro);
+                    return;
+                }
+                if (!resposta.ok) throw new Error(dados.erro || "Não foi possível salvar suas respostas.");
+                mostrarResultado(dados);
+            } catch (erro) {
+                statusQuiz.textContent = erro.message;
+            } finally {
+                botaoQuiz.disabled = false;
+            }
+        });
+
+        carregarProgresso();
+    </script>
 </body>
 </html>

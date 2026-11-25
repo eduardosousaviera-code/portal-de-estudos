@@ -2,8 +2,9 @@ import os
 import sqlite3
 from pathlib import Path
 
-from flask import Flask, abort, redirect, render_template, request, session, url_for
+from flask import Flask, abort, jsonify, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.exceptions import BadRequest
 
 from banco import inicializar_banco, obter_conexao
 
@@ -13,6 +14,12 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "chave-de-desenvolviment
 
 # Cria banco.db e a tabela de usuários na primeira execução.
 inicializar_banco()
+
+RESPOSTAS_CORRETAS_MEIO_AMBIENTE = {
+    "q1": "b",
+    "q2": "c",
+    "q3": "a",
+}
 
 
 @app.route("/css/<path:arquivo>")
@@ -161,6 +168,88 @@ def geografia_territorio():
 @app.route("/materias/geografia/meio-ambiente.html")
 def geografia_meio_ambiente():
     return render_template("html/matérias/temas-geo/meio-ambiente.html")
+
+
+@app.route("/api/progresso/meio-ambiente", methods=["GET", "POST"])
+def progresso_meio_ambiente():
+    usuario = session.get("usuario")
+    if not usuario:
+        return jsonify(erro="Faça login para salvar seu progresso."), 401
+
+    with obter_conexao() as conexao:
+        conta = conexao.execute(
+            "SELECT id FROM usuarios WHERE usuario = ?",
+            (usuario,),
+        ).fetchone()
+        if conta is None:
+            session.clear()
+            return jsonify(erro="Sua sessão expirou. Faça login novamente."), 401
+
+        usuario_id = conta["id"]
+
+        if request.method == "GET":
+            linhas = conexao.execute(
+                """
+                SELECT pergunta_id, alternativa
+                FROM respostas_meio_ambiente
+                WHERE usuario_id = ?
+                """,
+                (usuario_id,),
+            ).fetchall()
+            respostas = {linha["pergunta_id"]: linha["alternativa"] for linha in linhas}
+            resultado = {
+                "answers": respostas,
+                "results": {
+                    pergunta_id: alternativa == RESPOSTAS_CORRETAS_MEIO_AMBIENTE[pergunta_id]
+                    for pergunta_id, alternativa in respostas.items()
+                } if len(respostas) == len(RESPOSTAS_CORRETAS_MEIO_AMBIENTE) else None,
+                "correct_count": sum(
+                    respostas.get(pergunta_id) == alternativa_correta
+                    for pergunta_id, alternativa_correta in RESPOSTAS_CORRETAS_MEIO_AMBIENTE.items()
+                ) if len(respostas) == len(RESPOSTAS_CORRETAS_MEIO_AMBIENTE) else None,
+            }
+            return jsonify(resultado)
+
+        if not request.is_json:
+            return jsonify(erro="Envie as respostas em formato JSON."), 400
+
+        try:
+            dados = request.get_json()
+        except BadRequest:
+            return jsonify(erro="As respostas enviadas não são um JSON válido."), 400
+        respostas = dados.get("answers") if isinstance(dados, dict) else None
+        if (
+            not isinstance(respostas, dict)
+            or set(respostas) != set(RESPOSTAS_CORRETAS_MEIO_AMBIENTE)
+            or any(
+                not isinstance(alternativa, str) or alternativa not in {"a", "b", "c", "d"}
+                for alternativa in respostas.values()
+            )
+        ):
+            return jsonify(erro="Selecione uma alternativa para cada pergunta."), 400
+
+        conexao.executemany(
+            """
+            INSERT INTO respostas_meio_ambiente (usuario_id, pergunta_id, alternativa)
+            VALUES (?, ?, ?)
+            ON CONFLICT(usuario_id, pergunta_id)
+            DO UPDATE SET alternativa = excluded.alternativa
+            """,
+            [
+                (usuario_id, pergunta_id, alternativa)
+                for pergunta_id, alternativa in respostas.items()
+            ],
+        )
+
+    resultados = {
+        pergunta_id: respostas[pergunta_id] == alternativa_correta
+        for pergunta_id, alternativa_correta in RESPOSTAS_CORRETAS_MEIO_AMBIENTE.items()
+    }
+    return jsonify(
+        answers=respostas,
+        results=resultados,
+        correct_count=sum(resultados.values()),
+    )
 
 
 @app.route("/html/<path:filepath>")
